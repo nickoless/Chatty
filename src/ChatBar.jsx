@@ -23,15 +23,7 @@ class ChatBar extends Component {
       this.setState({messageText: ''});
     }
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
+    
   render(){
     return(
       <footer className="chatbar">
@@ -39,6 +31,7 @@ class ChatBar extends Component {
         <input
           value={this.state.messageText}
           onChange={this.onMessageTextChange.bind(this)}
+          className="chatbar-message"
           placeholder="Enter your message here!"
           onKeyPress={this.onMessageKeyPress.bind(this)} />
       </footer>
