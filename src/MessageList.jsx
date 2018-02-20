@@ -5,8 +5,8 @@ class MessageList extends Component {
     const messages = this.props.messages.map((message) => {
       if (message.type === 'user') {
         return (
-          <div key={message.id} className="message">
-            <span className="message-username">{message.username}</span>
+          <div key={message.id} className="message" id='message-list'>
+            <span className="message-username">{message.user}</span>
             <span className="message-content">{message.text}</span>
           </div>
         );
