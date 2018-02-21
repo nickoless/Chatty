@@ -15,7 +15,6 @@ class ChatBar extends Component {
   // changes state on current User
   onUserChange(event) {
     this.setState({userName: event.target.value});
-    console.log({userName: event.target.value})
   }
 
   // changes state on text change  

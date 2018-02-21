@@ -8,20 +8,9 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: 'Bob'},
-      messages: [
-          {
-            id: 1,
-            type: 'user',
-            user: 'Bob',
-            text: 'Has anyone seen my marbles?'
-          }, {
-            id: 2,
-            type: 'user',
-            user: 'Anon',
-            text: 'No, I think you lost them. You lost your marbles Bob. You lost the for good.'
-          }     
-      ]
+      messages: []
     };
+    this.Websocket = this.Websocket.bind(this);
   }
   
   newMessage(messageText, userName) {
@@ -31,10 +20,28 @@ class App extends Component {
       user: userName,
       text: messageText
     };
+
+    const user = newMessageObject.user;
+    const text = newMessageObject.text;
+
+    
     const newMessages = this.state.messages.concat(newMessageObject);
-    this.setState({
-      messages: newMessages
-    });
+    // this.setState({
+    //   messages: newMessages
+    // });
+
+    this.socket.send(JSON.stringify(`User ${user} said ${text}`));
+  }
+
+  Websocket() {
+    this.socket = new WebSocket('ws://localhost:3001');
+    this.socket.onopen = (event) => {
+      // this.socket.send('Hello Server!');
+      console.log('Connected to server!')
+    };
+    // this.socket.onmessage = (event) => {
+    //   console.log('Message from server: ', event.data);
+    // };
   }
 
   // in App.jsx
@@ -48,8 +55,8 @@ componentDidMount() {
     // Update the state of the app component.
     // Calling setState will trigger a call to render() in App and all child components.
     this.setState({messages: messages})
-    console.log(this.state.messages)
-  }, 3000);
+  }, 1000);
+  this.Websocket()
 }
   
   render() {
