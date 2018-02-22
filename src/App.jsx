@@ -15,22 +15,35 @@ class App extends Component {
   
   newMessage(messageText, userName) {
     const newMessageObject = {
-      id: Math.random(),
-      type: 'user',
+      // id: Math.random(),
+      type: 'postMessage',
       user: userName,
       text: messageText
     };
 
-    const user = newMessageObject.user;
-    const text = newMessageObject.text;
+    // Message sent from client to server
+    this.socket.send(JSON.stringify(newMessageObject));
 
-    
-    const newMessages = this.state.messages.concat(newMessageObject);
+    // Message broadcasted back from server
+    this.socket.onmessage = (event) => {
+      // JSON.parse(event.data);
+      let inMessage = JSON.parse(event.data);
+      console.log('Message from server: ', inMessage);
+
+      // broadcasted messages returned in message
+    const newMessages = this.state.messages.concat(inMessage);
+        this.setState({
+          messages: newMessages
+        });
+
+    };
+
+    // const newMessages = this.state.messages.concat(incomingMessage);
     // this.setState({
     //   messages: newMessages
     // });
 
-    this.socket.send(JSON.stringify(`User ${user} said ${text}`));
+
   }
 
   Websocket() {
@@ -39,9 +52,6 @@ class App extends Component {
       // this.socket.send('Hello Server!');
       console.log('Connected to server!')
     };
-    // this.socket.onmessage = (event) => {
-    //   console.log('Message from server: ', event.data);
-    // };
   }
 
   // in App.jsx
