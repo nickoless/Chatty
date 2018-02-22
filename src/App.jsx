@@ -10,33 +10,33 @@ class App extends Component {
       currentUser: {name: 'Bob'},
       messages: []
     };
-    this.Websocket = this.Websocket.bind(this);
+    // this.Websocket = this.Websocket.bind(this);
+    // this.newMessage = this.newMessage.bind(this)
   }
   
   newMessage(messageText, userName) {
     const newMessageObject = {
-      // id: Math.random(),
       type: 'postMessage',
       user: userName,
       text: messageText
     };
 
+    // let userholder = []
+    // userholder.push(newMessageObject.user)
+    // console.log('this is an array' + userholder)
+    // console.log('this is the current user' + newMessageObject.user)
+    // // console.log(JSON.stringify(newMessageObject.user))
+
+
+    // if (userholder[0] !== newMessageObject.user) {
+    //   console.log(JSON.stringify(this.state.messages[0].user));
+      
+    //   console.log('Youve changed');
+    // }
+
+
     // Message sent from client to server
     this.socket.send(JSON.stringify(newMessageObject));
-
-    // Message broadcasted back from server
-    this.socket.onmessage = (event) => {
-      // JSON.parse(event.data);
-      let inMessage = JSON.parse(event.data);
-      console.log('Message from server: ', inMessage);
-
-      // broadcasted messages returned in message
-    const newMessages = this.state.messages.concat(inMessage);
-        this.setState({
-          messages: newMessages
-        });
-
-    };
 
     // const newMessages = this.state.messages.concat(incomingMessage);
     // this.setState({
@@ -46,13 +46,9 @@ class App extends Component {
 
   }
 
-  Websocket() {
-    this.socket = new WebSocket('ws://localhost:3001');
-    this.socket.onopen = (event) => {
-      // this.socket.send('Hello Server!');
-      console.log('Connected to server!')
-    };
-  }
+  // Websocket() {
+   
+  // }
 
   // in App.jsx
 componentDidMount() {
@@ -66,7 +62,29 @@ componentDidMount() {
     // Calling setState will trigger a call to render() in App and all child components.
     this.setState({messages: messages})
   }, 1000);
-  this.Websocket()
+  // this.Websocket()
+
+  // Connect to socket
+  this.socket = new WebSocket('ws://localhost:3001');
+
+  // Confirmation of connection
+  this.socket.onopen = (event) => {
+    console.log('Connected to server!')
+  };
+
+
+  // Message broadcasted back from server
+  this.socket.onmessage = (event) => {
+
+  // JSON.parse(event.data);
+  let inMessage = JSON.parse(event.data);
+  console.log('Message from server: ', inMessage);
+
+    const newMessages = this.state.messages.concat(inMessage);
+        this.setState({
+          messages: newMessages
+        });
+    };
 }
   
   render() {
