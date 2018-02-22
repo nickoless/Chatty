@@ -8,10 +8,9 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: 'Bob'},
-      messages: []
+      messages: [],
+      userCount: 0
     };
-    // this.Websocket = this.Websocket.bind(this);
-    // this.newMessage = this.newMessage.bind(this)
   }
   
   newMessage(messageText, userName) {
@@ -21,48 +20,23 @@ class App extends Component {
       text: messageText
     };
 
-    // let userholder = []
-    // userholder.push(newMessageObject.user)
-    // console.log('this is an array' + userholder)
-    // console.log('this is the current user' + newMessageObject.user)
-    // // console.log(JSON.stringify(newMessageObject.user))
-
-
-    // if (userholder[0] !== newMessageObject.user) {
-    //   console.log(JSON.stringify(this.state.messages[0].user));
-      
-    //   console.log('Youve changed');
-    // }
-
-
     // Message sent from client to server
     this.socket.send(JSON.stringify(newMessageObject));
-
-    // const newMessages = this.state.messages.concat(incomingMessage);
-    // this.setState({
-    //   messages: newMessages
-    // });
-
-
   }
 
-  // Websocket() {
-   
-  // }
+  // userCount
 
-  // in App.jsx
 componentDidMount() {
   console.log("componentDidMount <App />");
   setTimeout(() => {
     console.log("Simulating incoming message");
     // Add a new message to the list of messages in the data store
-    const newMessage = {id: 3, type: 'user', user: "Michelle", text: "Hello there!"};
+    const newMessage = {id: 3, type: 'incomingMessage', user: "Michelle", text: "Hello there!"};
     const messages = this.state.messages.concat(newMessage)
     // Update the state of the app component.
     // Calling setState will trigger a call to render() in App and all child components.
     this.setState({messages: messages})
   }, 1000);
-  // this.Websocket()
 
   // Connect to socket
   this.socket = new WebSocket('ws://localhost:3001');
@@ -70,27 +44,36 @@ componentDidMount() {
   // Confirmation of connection
   this.socket.onopen = (event) => {
     console.log('Connected to server!')
-  };
-
+  };        
 
   // Message broadcasted back from server
   this.socket.onmessage = (event) => {
 
   // JSON.parse(event.data);
+
   let inMessage = JSON.parse(event.data);
   console.log('Message from server: ', inMessage);
+
+   // updates the user count
+    const updateUserCount = this.setState({userCount: inMessage})
+
+    // console.log('This is the user count: ' + this.state.userCount)
 
     const newMessages = this.state.messages.concat(inMessage);
         this.setState({
           messages: newMessages
         });
     };
+
+    this.socket.onclose = (event) => {
+      this.setState({userCount:inMessage})
+    }
 }
   
   render() {
     return (
       <div>
-        <NavBar />
+        <NavBar userCount={this.state.userCount}/>
         <MessageList messages={this.state.messages} />
         <ChatBar newMessage={this.newMessage.bind(this)} />
       </div>
