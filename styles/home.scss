@@ -1,5 +1,5 @@
 body {
-  background: white;
+  background: #A0C1D1;
   color: black;
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
@@ -19,7 +19,6 @@ body {
 
 .chatbar-message,
 .chatbar-username {
-  border: 1px solid black;
   display: block;
   height: 40px;
   line-height: 40px;
@@ -35,28 +34,46 @@ body {
   flex: 2;
 }
 
+.message-avatar {
+  height: 30px;
+  width: 30px;
+  display: flex;
+  border-radius: 3px;
+  margin: 2px;
+}
+
 .message {
+  background-color: white;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 15px;
   display: flex;
   padding: 5px;
 }
 
-.message.system {
+.message-system {
   font-style: italic;
+  color: white;
   padding: 5px 20px;
 }
 
 .message-content,
 .message-username {
   overflow: hidden;
+  border-color: black;
+
   margin: 5px;
-  padding: 0 10px;
+  padding: 5px;
 }
 
 .message-content {
+  border-color: black;
   flex: 8;
 }
 
 .message-username {
+  border-color: black;
+
   flex: 2;
   font-weight: 700;
 }
@@ -77,6 +94,7 @@ body {
   color: inherit;
   display: block;
   float: left;
+  font-family: 'Lobster', cursive;
   font-weight: 700;
   font-size: 28px;
   height: 60px;
@@ -89,5 +107,3 @@ body {
   float: right;
   margin: 20px
 }
-
-// get flexbox

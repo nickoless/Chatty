@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Message from './Message.jsx';
 
 class MessageList extends Component {
   render() {
@@ -7,13 +6,14 @@ class MessageList extends Component {
       if (message.type === 'incomingMessage') {
         return (
           <div key={message.id} className="message" id='message-list'>
-            <span className="message-username">{message.user}</span>
+            <img className="message-avatar" src={`https://ui-avatars.com/api/?name=${message.user}&length=1`}/>
+            <span className="message-username">{message.user} </span> 
             <span className="message-content">{message.text}</span>
           </div>
         );
       } else if (message.type === 'incomingNotification') {
         return (
-          <div key={message.id} className="message system">
+          <div key={message.id} className="message-system">
             {message.text}
           </div>
         );

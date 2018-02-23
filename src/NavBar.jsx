@@ -4,16 +4,14 @@ import React, {Component} from 'react';
 
 class NavBar extends Component {
   render () {
-
     let userPlural = 'users'
     if (this.props.userCount <= 1) {
       userPlural = 'user';
     } 
-  
     return (
       <nav className="navbar">
-       <a href="/" className="navbar-brand">ISeeQueue</a>
-       <span className="navbar-count">{this.props.userCount} {userPlural} online</span>
+       <a href="/" className="navbar-brand">Chatty</a>
+       <span className="navbar-count">{this.props.userCount} {userPlural} chatting</span>
       </nav>
     );
   }

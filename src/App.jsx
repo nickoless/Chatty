@@ -9,7 +9,7 @@ class App extends Component {
     this.state = {
       currentUser: 'Anon',
       messages: [],
-      userCount: 0
+      userCount: 0,
     };
   }
   
@@ -24,8 +24,6 @@ class App extends Component {
   }
 
   newUser(userName) {
-    // console.log('current: ' + this.state.currentUser)
-    // console.log('new: ' + newUserObject.newUser)
     if (this.state.currentUser !== userName) {
       const newUserMessage = {
         old: this.state.currentUser,
@@ -37,47 +35,42 @@ class App extends Component {
     }
   }
 
-  // userCount
+  componentDidMount() {
+    console.log("componentDidMount <App />");
+    setTimeout(() => {
+      const newMessage = {id: 3, type: 'incomingMessage', user: "Mr. Chat", text: "Hey there, welcome to Chatty!"};
+      const messages = this.state.messages.concat(newMessage)
+      this.setState({messages: messages});
+    }, 1000);
 
-componentDidMount() {
-  // console.log("componentDidMount <App />");
-  // setTimeout(() => {
-  //   console.log("Simulating incoming message");
-  //   // Add a new message to the list of messages in the data store
-  //   const newMessage = {id: 3, type: 'incomingMessage', user: "Michelle", text: "Hello, you're terrific"};
-  //   const messages = this.state.messages.concat(newMessage)
-  //   // Update the state of the app component.
-  //   // Calling setState will trigger a call to render() in App and all child components.
-  //   this.setState({messages: messages});
-  // }, 1000);
+    this.socket = new WebSocket('ws://localhost:3001');
 
-  this.socket = new WebSocket('ws://localhost:3001');
+    this.socket.onopen = (event) => {
+      console.log('Connected to server!')
+    };        
 
-  this.socket.onopen = (event) => {
-    console.log('Connected to server!')
-  };        
+    this.socket.onmessage = (event) => {
+      let broadcastedMessage = JSON.parse(event.data);
 
-  this.socket.onmessage = (event) => {
-
-    let incomingMessage = JSON.parse(event.data);
-
-    if (incomingMessage.type === 'countUpdate') {
-      const updateUserCount = this.setState({userCount: incomingMessage.count});
-    }
-
-    const newMessages = this.state.messages.concat(incomingMessage);
-
-    this.setState({
-      messages: newMessages,
-    });
-  };
-  this.socket.onclose = (event) => {
-  };
-}
-  
+      if (broadcastedMessage.type === 'countUpdate') {
+        const updateUserCount = this.setState({userCount: broadcastedMessage.count});
+      }
+      if (broadcastedMessage.type === 'incomingMessage') {
+        const newMessage = this.state.messages.concat(broadcastedMessage);
+        this.setState({messages: newMessage});
+      }
+      if (broadcastedMessage.type === 'incomingNotification') {
+        const newNotification = this.state.messages.concat(broadcastedMessage);
+        this.setState({messages: newNotification});
+      }
+    };
+    this.socket.onclose = (event) => {
+    };
+  }
+    
   render() {
     return (
-      <div>
+      <div key={'test'}>
         <NavBar userCount={this.state.userCount}/>
         <MessageList user={this.state.user} messages={this.state.messages} />
         <ChatBar newUser={this.newUser.bind(this)} newMessage={this.newMessage.bind(this)} />
