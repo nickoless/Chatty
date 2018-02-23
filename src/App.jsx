@@ -37,52 +37,41 @@ class App extends Component {
     }
   }
 
-  
-
   // userCount
 
 componentDidMount() {
-  console.log("componentDidMount <App />");
-  setTimeout(() => {
-    console.log("Simulating incoming message");
-    // Add a new message to the list of messages in the data store
-    const newMessage = {id: 3, type: 'incomingMessage', user: "Michelle", text: "Hello, you're terrific"};
-    const messages = this.state.messages.concat(newMessage)
-    // Update the state of the app component.
-    // Calling setState will trigger a call to render() in App and all child components.
-    this.setState({messages: messages})
-  }, 1000);
+  // console.log("componentDidMount <App />");
+  // setTimeout(() => {
+  //   console.log("Simulating incoming message");
+  //   // Add a new message to the list of messages in the data store
+  //   const newMessage = {id: 3, type: 'incomingMessage', user: "Michelle", text: "Hello, you're terrific"};
+  //   const messages = this.state.messages.concat(newMessage)
+  //   // Update the state of the app component.
+  //   // Calling setState will trigger a call to render() in App and all child components.
+  //   this.setState({messages: messages});
+  // }, 1000);
 
-  // Connect to socket
   this.socket = new WebSocket('ws://localhost:3001');
 
-  // Confirmation of connection
   this.socket.onopen = (event) => {
     console.log('Connected to server!')
   };        
 
-  // Message broadcasted back from server
   this.socket.onmessage = (event) => {
 
-    // JSON.parse(event.data);
+    let incomingMessage = JSON.parse(event.data);
 
-    let inMessage = JSON.parse(event.data);
-    console.log('Message from server: ', inMessage);
+    if (incomingMessage.type === 'countUpdate') {
+      const updateUserCount = this.setState({userCount: incomingMessage.count});
+    }
 
-    // updates the user count
-    const updateUserCount = this.setState({userCount: inMessage})
-
-    // console.log('This is the user count: ' + this.state.userCount)
-    // console.log(inMessage)
-    const newMessages = this.state.messages.concat(inMessage);
+    const newMessages = this.state.messages.concat(incomingMessage);
 
     this.setState({
       messages: newMessages,
     });
   };
-
   this.socket.onclose = (event) => {
-    // this.setState({userCount:inMessage})
   };
 }
   

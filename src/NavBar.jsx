@@ -2,26 +2,18 @@
 
 import React, {Component} from 'react';
 
-// THE RITUAL
-
 class NavBar extends Component {
   render () {
 
-    const userCheck = this.props.userCount
-
-
-   const typeConfirm = () => {
-      if (userCheck.type === 'countUpdate') {
-        return {userCheck};
-      }
-    };
-
-    // bug - user count only works on first refresh. Everytime a message is sent, it tries to pull in a new object and loses value
-
+    let userPlural = 'users'
+    if (this.props.userCount <= 1) {
+      userPlural = 'user';
+    } 
+  
     return (
       <nav className="navbar">
        <a href="/" className="navbar-brand">ISeeQueue</a>
-       <span className="navbar-count">{userCheck.count} users online</span>
+       <span className="navbar-count">{this.props.userCount} {userPlural} online</span>
       </nav>
     );
   }
