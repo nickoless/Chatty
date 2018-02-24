@@ -19,7 +19,6 @@ class App extends Component {
       user: this.state.currentUser,
       text: messageText
     };
-    // Message sent from client to server
     this.socket.send(JSON.stringify(newMessageObject));
   }
 
