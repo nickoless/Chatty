@@ -4,8 +4,8 @@ Chatty is a simple messaging app that allows users to communicate with each othe
 
 ## Final Product
 
-!["Screenshot of the main feed](URL GOES HERE)
-!["Screenshot of a user changing names](URL GOES HERE)
+!["Screenshot of the main feed](https://github.com/nickoless/Chatty/blob/master/docs/feed.png)
+!["Screenshot of a user changing names](https://github.com/nickoless/Chatty/blob/master/docs/name-change.png)
 
 ## Dependencies
 App
